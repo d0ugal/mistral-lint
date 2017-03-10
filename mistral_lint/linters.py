@@ -21,8 +21,8 @@ def description(path, string, yaml):
         yield "Probably not a workbook. Not supported. {}".format(path)
         raise StopIteration
 
-    W102 = "W101: Workbook {} has no description"
-    W101 = "W102: Workflow {}.{} has no description"
+    W101 = "W101: Workbook {} has no description"
+    W102 = "W102: Workflow {}.{} has no description"
 
     workbook = yaml['name']
 
