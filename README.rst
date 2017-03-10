@@ -18,34 +18,34 @@ Example Output
 ::
 
     workbooks/baremetal.yaml
-    W101: Workbook tripleo.baremetal.v1 has no description
-    W101: Workbook tripleo.baremetal.v1 has no description
-    W101: Workbook tripleo.baremetal.v1 has no description
+    W102: Workflow tripleo.baremetal.v1.set_node_state has no description
+    W102: Workflow tripleo.baremetal.v1.set_power_state has no description
+    W102: Workflow tripleo.baremetal.v1.manual_cleaning has no description
     E103: Input node_uuids is not used in Workflow tripleo.baremetal.v1.cellv2_discovery
 
     workbooks/deployment.yaml
-    W101: Workbook tripleo.deployment.v1 has no description
-    W101: Workbook tripleo.deployment.v1 has no description
+    W102: Workflow tripleo.deployment.v1.deploy_on_server has no description
+    W102: Workflow tripleo.deployment.v1.deploy_on_servers has no description
 
     workbooks/plan_management.yaml
-    W101: Workbook tripleo.plan_management.v1 has no description
-    W101: Workbook tripleo.plan_management.v1 has no description
-    W101: Workbook tripleo.plan_management.v1 has no description
+    W102: Workflow tripleo.plan_management.v1.create_deployment_plan has no description
+    W102: Workflow tripleo.plan_management.v1.update_deployment_plan has no description
+    W102: Workflow tripleo.plan_management.v1.create_default_deployment_plan has no description
 
     workbooks/stack.yaml
-    W101: Workbook tripleo.stack.v1 has no description
-    W101: Workbook tripleo.stack.v1 has no description
-    W101: Workbook tripleo.stack.v1 has no description
-    W101: Workbook tripleo.stack.v1 has no description
+    W102: Workflow tripleo.stack.v1.wait_for_stack_complete_or_failed has no description
+    W102: Workflow tripleo.stack.v1.wait_for_stack_in_progress has no description
+    W102: Workflow tripleo.stack.v1.wait_for_stack_does_not_exist has no description
+    W102: Workflow tripleo.stack.v1.delete_stack has no description
 
     workbooks/validations.yaml
-    W101: Workbook tripleo.validations.v1 has no description
-    W101: Workbook tripleo.validations.v1 has no description
-    W101: Workbook tripleo.validations.v1 has no description
-    W101: Workbook tripleo.validations.v1 has no description
-    W101: Workbook tripleo.validations.v1 has no description
-    W101: Workbook tripleo.validations.v1 has no description
-    W101: Workbook tripleo.validations.v1 has no description
+    W102: Workflow tripleo.validations.v1.run_validation has no description
+    W102: Workflow tripleo.validations.v1.run_validations has no description
+    W102: Workflow tripleo.validations.v1.run_groups has no description
+    W102: Workflow tripleo.validations.v1.list has no description
+    W102: Workflow tripleo.validations.v1.list_groups has no description
+    W102: Workflow tripleo.validations.v1.add_validation_ssh_key_parameter has no description
+    W102: Workflow tripleo.validations.v1.copy_ssh_key has no description
     E103: Input queue_name is not used in Workflow tripleo.validations.v1.add_validation_ssh_key_parameter
 
 
