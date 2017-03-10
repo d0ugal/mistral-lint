@@ -3,6 +3,7 @@ from __future__ import print_function
 import six
 import yaml as pyyaml
 
+
 def _find_line(match, contents):
 
     for lineno, line in enumerate(contents.splitlines(), start=1):
@@ -14,7 +15,7 @@ def description(path, string, yaml):
     """Verify that Workbooks and Workflows have descriptions"""
 
     if 'workflows' not in yaml:
-        print("Probably not a workbook. Not supported")
+        print("Probably not a workbook. Not supported. {}".format(path))
         return
 
     W102 = "W101: Workbook {} has no description"
@@ -34,7 +35,7 @@ def type_(path, string, yaml):
     """Check that type 'direct' isn't specified as it isn't needed"""
 
     if 'workflows' not in yaml:
-        print("Probably not a workbook. Not supported")
+        print("Probably not a workbook. Not supported. {}".format(path))
         return
 
     W103 = ("W103: Type 'direct' is the default and can be removed from "
@@ -50,7 +51,7 @@ def inputs(path, string, yaml):
     """Check that the workflow inputs are used"""
 
     if 'workflows' not in yaml:
-        print("Probably not a workbook. Not supported")
+        print("Probably not a workbook. Not supported. {}".format(path))
         return
 
     E101 = "E103: Input {} is not used in Workflow {}.{}"
@@ -101,7 +102,7 @@ def tasks(path, string, yaml):
     """Check that all tasks exist"""
 
     if 'workflows' not in yaml:
-        print("Probably not a workbook. Not supported")
+        print("Probably not a workbook. Not supported. {}".format(path))
         return
 
     for workflow_name, workflow in yaml['workflows'].items():
