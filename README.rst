@@ -1,6 +1,8 @@
 Mint
 ====
 
+|PyPI Version| |Build Status|
+
 Usage::
 
     $ pip install mistral-lint
@@ -17,3 +19,8 @@ Ideas
 - Check zaqar format
 - Interactive workflow with zaqar posting the continue code.
 - Check sub-workflows are provided the queue name
+
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/mistral-lint.png
+   :target: https://pypi.python.org/pypi/mistral-lint
+.. |Build Status| image:: https://img.shields.io/travis/d0ugal/mistral-lint/master.png
+   :target: https://travis-ci.org/d0ugal/mistral-lint
