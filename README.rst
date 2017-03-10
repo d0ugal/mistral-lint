@@ -3,7 +3,10 @@ Mint
 
 |PyPI Version| |Build Status|
 
-Usage::
+Usage
+-----
+
+::
 
     $ pip install mistral-lint
     $ mistral-lint path-to-files
