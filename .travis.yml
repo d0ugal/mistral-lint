@@ -11,3 +11,13 @@ install:
 script:
 - git clean -f -d -x
 - tox
+deploy:
+  provider: pypi
+  user: d0ugal-deploy
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    repo: d0ugal/mistral-lint
+    condition: "$TOXENV = py35"
+  password:
+    secure: YNEEy81xGfDmz+a/FiByvhcI5s5psGXPo/eUlUooaBSBiQc94KIoQLg2YTk2+vo6PKiLwVr5YKBTKFg3t1x70aFFxn9JugHiO9XYLv2c2XdEK8OMcS3lmMwvgmhFfMdb8tG8X+R06jqbZOXS/zGSe9hWu3BJ6RAXPZ+GP5bLcay3ERW6cTCO8aTJw2VZHaQ0RIoncKVkqlheMl8BP38Kkofk5APPo6QArETQKjfd9n97NbbCVgLgbVVd86XcLzqeJb3as83xuUAGoGeglMdHBfxhO4ih1J8HR2jNYMuA5IJB2ywRiXjyw0pvEYRr5r4QzeVbj/ta5A1WKFJqp3/W8CttLCRi5r8MVzTa/arAzP+FTG6OWjiMSEF08LoIt3faDveD7QIGbA9XPx0vJ1iOSSkVfS4DoS3vnn7t2btVWpLsmIf0sGIgQgJHTjrUpphbguwfb0k3wPkXsuX1mt2Hm26E6KNsq532BYVNOJjPnK+iUYSUgjwYup8gkoFK8n2wPu5n18NpYYI75ix/AE42efhIWgjemRmC2IPcyWtFKsEYeicfbmyeVwXuqtR9ZvIcjC4E10H9lqacDLKMPl5LLxj7kJlBnZRWyf4YENv7tj+IGLqCanEIh/mdYbMUPDUGrAHrpVQXSxzM2hiu0cTop/30qTdJxPjUerZd0RuuDR4=
