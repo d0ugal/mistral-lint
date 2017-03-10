@@ -1,4 +1,13 @@
+from __future__ import print_function
+
+import six
 import yaml as pyyaml
+
+def _find_line(match, contents):
+
+    for lineno, line in enumerate(contents.splitlines(), start=1):
+        if match in line:
+            return lineno
 
 
 def description(path, string, yaml):
@@ -21,7 +30,7 @@ def description(path, string, yaml):
             print(W102.format(workbook, workflow))
 
 
-def type(path, string, yaml):
+def type_(path, string, yaml):
     """Check that type 'direct' isn't specified as it isn't needed"""
 
     if 'workflows' not in yaml:
@@ -61,6 +70,8 @@ def inputs(path, string, yaml):
 
 def _check_exists(task, key, names):
 
+    ENGINE_COMMANDS = ["fail", "pause", "succeed"]
+
     task_list = task.get(key)
 
     if not task_list:
@@ -71,11 +82,15 @@ def _check_exists(task, key, names):
     if isinstance(task_list, str):
         task_list = task_list.split(' ', 1)[0]
         if task_list not in names:
+            if task_list in ENGINE_COMMANDS:
+                return
             print(W104.format(task_list, key))
     elif isinstance(task_list, (list, dict)):
         for task in task_list:
             if isinstance(task, dict):
                 task = next(iter(task.keys()))
+            if task in ENGINE_COMMANDS:
+                continue
             if task not in names:
                 print(W104.format(task, key))
     else:
@@ -97,3 +112,35 @@ def tasks(path, string, yaml):
             _check_exists(task, 'on-success', tasks)
             _check_exists(task, 'on-error', tasks)
             _check_exists(task, 'on-complete', tasks)
+
+
+def _find_strings(value):
+    if value is None or isinstance(value, int):
+        pass
+    elif isinstance(value, six.string_types):
+        yield value
+    elif isinstance(value, list):
+        for thing in value:
+            for s in _find_strings(thing):
+                yield s
+    elif isinstance(value, dict):
+        for k, v in value.items():
+            for s in _find_strings(k):
+                yield s
+            for s in _find_strings(v):
+                yield s
+    else:
+        raise Exception(type(value))
+
+
+def expressions(path, string, yaml):
+
+    for expr in _find_strings(yaml):
+        W105 = "W105: Invalid expression '{}' on line {} in {}"
+
+        if expr.count("<%") != expr.count("%>"):
+            lineno = _find_line(expr, string)
+            print(W105.format(expr, lineno, path))
+        elif expr.count("{{") != expr.count("}}"):
+            lineno = _find_line(expr, string)
+            print(W105.format(expr, lineno, path))

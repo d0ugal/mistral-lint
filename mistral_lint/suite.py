@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import copy
 import os
 import pkg_resources
@@ -32,7 +34,6 @@ class LintSuite(object):
         return linters
 
     def lint_file(self, path, linters):
-        print(path)
 
         with open(path) as f:
             loaded_file = f.read()
