@@ -3,6 +3,7 @@ from __future__ import print_function
 import copy
 import os
 import pkg_resources
+import sys
 
 import yaml
 
@@ -36,22 +37,41 @@ class LintSuite(object):
     def lint_file(self, path, linters):
 
         with open(path) as f:
-            loaded_file = f.read()
-            loaded_yaml = yaml.safe_load(loaded_file)
+            yaml_string = f.read()
+
+        return self.lint_string(path, yaml_string, linters)
+
+    def lint_string(self, path, yaml_string, linters):
+
+        loaded_yaml = yaml.safe_load(yaml_string)
+
+        errors = []
 
         for name, linter in linters.items():
-            linter(path, loaded_file, copy.deepcopy(loaded_yaml))
+            for error in linter(path, yaml_string, copy.deepcopy(loaded_yaml)):
+                if error is not None:
+                    errors.append(error)
 
-        print()
+        if errors:
+            print(path)
+            for error in errors:
+                print(error)
+            print()
+
+        return errors
 
     def run_lint(self, paths):
 
-        linters = self._find_linters()
+        passed = True
 
+        linters = self._find_linters()
         for path in paths:
             for path in self._walk_files(path):
+                file_result = self.lint_file(path, linters)
+                passed = passed and len(file_result)
 
-                self.lint_file(path, linters)
+        if not passed:
+            sys.exit(1)
 
 
 def lint(paths):

@@ -12,6 +12,43 @@ Usage
     $ mistral-lint path-to-files
 
 
+Example Output
+--------------
+
+::
+
+    workbooks/baremetal.yaml
+    W101: Workbook tripleo.baremetal.v1 has no description
+    W101: Workbook tripleo.baremetal.v1 has no description
+    W101: Workbook tripleo.baremetal.v1 has no description
+    E103: Input node_uuids is not used in Workflow tripleo.baremetal.v1.cellv2_discovery
+
+    workbooks/deployment.yaml
+    W101: Workbook tripleo.deployment.v1 has no description
+    W101: Workbook tripleo.deployment.v1 has no description
+
+    workbooks/plan_management.yaml
+    W101: Workbook tripleo.plan_management.v1 has no description
+    W101: Workbook tripleo.plan_management.v1 has no description
+    W101: Workbook tripleo.plan_management.v1 has no description
+
+    workbooks/stack.yaml
+    W101: Workbook tripleo.stack.v1 has no description
+    W101: Workbook tripleo.stack.v1 has no description
+    W101: Workbook tripleo.stack.v1 has no description
+    W101: Workbook tripleo.stack.v1 has no description
+
+    workbooks/validations.yaml
+    W101: Workbook tripleo.validations.v1 has no description
+    W101: Workbook tripleo.validations.v1 has no description
+    W101: Workbook tripleo.validations.v1 has no description
+    W101: Workbook tripleo.validations.v1 has no description
+    W101: Workbook tripleo.validations.v1 has no description
+    W101: Workbook tripleo.validations.v1 has no description
+    W101: Workbook tripleo.validations.v1 has no description
+    E103: Input queue_name is not used in Workflow tripleo.validations.v1.add_validation_ssh_key_parameter
+
+
 Ideas
 -----
 
