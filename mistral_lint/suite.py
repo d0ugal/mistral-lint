@@ -45,6 +45,21 @@ class LintSuite(object):
 
         loaded_yaml = yaml.safe_load(yaml_string)
 
+        keys = set(loaded_yaml.keys())
+
+        base_spec = {'name', 'version', 'description', 'tags'}
+        file_type = None
+        if keys.issubset(base_spec | {"version", "actions", "workflows"}):
+            file_type = "workbook"
+        elif keys.issubset(base_spec | {"type", "task-default", "input",
+                                        "output", "output-on-error", "vars"}):
+            file_type = "workflow"
+        else:
+            print("Ignoring {}. It doesn't seem to be a workbook or workflow"
+                  .format(path))
+            return []
+
+
         errors = []
 
         for name, linter in linters.items():
