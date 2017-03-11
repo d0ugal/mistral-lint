@@ -11,6 +11,9 @@ install:
 script:
 - git clean -f -d -x
 - tox
+matrix:
+  allow_failures:
+    - env: TOXENV=tripleo
 deploy:
   provider: pypi
   user: d0ugal-deploy
