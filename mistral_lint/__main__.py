@@ -1,7 +1,7 @@
 import argparse
-import tempfile
-import os
 import json
+import os
+import tempfile
 
 import requests
 
@@ -15,6 +15,7 @@ parser.add_argument('--review', default=None, help=(
     "linted - the paths argument will be ignored in this case."))
 parser.add_argument('paths', nargs='*', help=(
     "A set of local paths to lint."))
+
 
 def _download_review(review_id):
 
@@ -37,7 +38,6 @@ def _download_review(review_id):
         suite.lint([tmpdirname, ])
 
 
-
 def main():
     args = parser.parse_args()
 
@@ -45,8 +45,6 @@ def main():
         _download_review(args.review)
     elif args.paths:
         suite.lint(args.paths)
-
-
 
 
 if __name__ == "__main__":

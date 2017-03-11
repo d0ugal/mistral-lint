@@ -41,24 +41,24 @@ class LintSuite(object):
 
         return self.lint_string(path, yaml_string, linters)
 
-    def lint_string(self, path, yaml_string, linters):
+    def lint_string(self, path, yaml_string, linters, validate_file=True):
 
         loaded_yaml = yaml.safe_load(yaml_string)
 
         keys = set(loaded_yaml.keys())
 
         base_spec = {'name', 'version', 'description', 'tags'}
-        file_type = None
-        if keys.issubset(base_spec | {"version", "actions", "workflows"}):
-            file_type = "workbook"
+        if not validate_file:
+            pass
+        elif keys.issubset(base_spec | {"version", "actions", "workflows"}):
+            pass
         elif keys.issubset(base_spec | {"type", "task-default", "input",
                                         "output", "output-on-error", "vars"}):
-            file_type = "workflow"
+            pass
         else:
             print("Ignoring {}. It doesn't seem to be a workbook or workflow"
                   .format(path))
             return []
-
 
         errors = []
 

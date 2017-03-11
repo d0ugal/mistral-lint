@@ -8,7 +8,7 @@ def expressions(suite):
     def lint(yaml):
         return suite.lint_string("path", yaml, {
             "expressions": linters.expressions
-        })
+        }, validate_file=False)
     return lint
 
 
