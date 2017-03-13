@@ -12,6 +12,49 @@ Usage
     $ mistral-lint path-to-files
 
 
+Reviewing a review in OpenStack's gerrit? We got you.
+
+::
+
+    $ mistral-lint --review $GERRIT_REVIEW_ID
+
+
+Current Linters
+---------------
+
+These are the current linters that are included.
+
+W101 & W102 Description
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Checks that each workbook and workflow has a description.
+
+W103 type
+~~~~~~~~~
+
+Checks the workflow type, if "direct" is given it gives a warning that it isn't
+needed
+
+E101 inputs
+~~~~~~~~~~~
+
+Checks that workflow inputs are used.
+
+
+E102 task exists
+~~~~~~~~~~~~~~~~
+
+Check that tasks are defined in the workflow when they are used in on-success,
+on-error or on-complete
+
+E103, E104, E105 expressions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Checks that expressions have a matching number of opening and closing brackets.
+Validates YAML and Jinja2 expressions with the library parsers.
+
+
+
 Example Output
 --------------
 
@@ -47,6 +90,8 @@ Example Output
     W102: Workflow tripleo.validations.v1.add_validation_ssh_key_parameter has no description
     W102: Workflow tripleo.validations.v1.copy_ssh_key has no description
     E103: Input queue_name is not used in Workflow tripleo.validations.v1.add_validation_ssh_key_parameter
+
+
 
 
 Ideas

@@ -57,7 +57,7 @@ def inputs(path, string, yaml):
         yield "Probably not a workbook. Not supported. {}".format(path)
         return
 
-    E101 = "E103: Input {} is not used in Workflow {}.{}"
+    E101 = "E101: Input {} is not used in Workflow {}.{}"
 
     workbook = yaml['name']
     for workflow, struct in yaml['workflows'].items():
@@ -81,14 +81,14 @@ def _check_exists(task, key, names):
     if not task_list:
         return
 
-    W104 = "W104: Call to task {} in {} which isn't found"
+    E102 = "E102: Call to task {} in {} which isn't found"
 
     if isinstance(task_list, str):
         task_list = task_list.split(' ', 1)[0]
         if task_list not in names:
             if task_list in ENGINE_COMMANDS:
                 return
-            yield W104.format(task_list, key)
+            yield E102.format(task_list, key)
     elif isinstance(task_list, (list, dict)):
         for task in task_list:
             if isinstance(task, dict):
@@ -96,7 +96,7 @@ def _check_exists(task, key, names):
             if task in ENGINE_COMMANDS:
                 continue
             if task not in names:
-                yield W104.format(task, key)
+                yield E102.format(task, key)
     else:
         raise Exception(task_list)
 
@@ -149,7 +149,7 @@ def _validate_jinja2(template, string, path):
         env.parse(string)
     except jinja2.TemplateError:
         lineno = _find_line(template, string)
-        return ("W106: Failed to parse jinja2 expression '{}' on line {} in {}"
+        return ("E104: Failed to parse jinja2 expression '{}' on line {} in {}"
                 .format(template, lineno, path))
 
 
@@ -162,21 +162,21 @@ def _validate_yaql(template, string, path):
             YAQL_ENGINE(found.strip("<%>"))
     except (yaql_exc.YaqlException, KeyError, ValueError, TypeError):
         lineno = _find_line(template, string)
-        return ("W106: Failed to parse yaql expression '{}' on line {} in {}"
+        return ("W105: Failed to parse yaql expression '{}' on line {} in {}"
                 .format(template, lineno, path))
 
 
 def expressions(path, string, yaml):
 
     for expr in _find_strings(yaml):
-        W105 = "W105: Expression brackets don't match '{}' on line {} in {}"
+        E103 = "E103: Expression brackets don't match '{}' on line {} in {}"
 
         if expr.count("<%") != expr.count("%>"):
             lineno = _find_line(expr, string)
-            yield W105.format(expr, lineno, path)
+            yield E103.format(expr, lineno, path)
         elif expr.count("{{") != expr.count("}}"):
             lineno = _find_line(expr, string)
-            yield W105.format(expr, lineno, path)
+            yield E103.format(expr, lineno, path)
         elif JINJA_REGEXP.search(expr) or JINJA_BLOCK_REGEXP.search(expr):
             yield _validate_jinja2(expr, string, path)
         elif YAQL_REGEXP.search(expr):
