@@ -18,6 +18,15 @@ Reviewing a review in OpenStack's gerrit? We got you.
 
     $ mistral-lint --review $GERRIT_REVIEW_ID
 
+If you add --diff it will compare the patch to its parent commit, making it
+easier to see what changed. For example:
+
+::
+
+    $ mistral-lint --diff --review 428178
+    +E101: Input flavor_list is not used in Workflow tripleo.validations.v1.collect_flavors
+    +W102: Workflow tripleo.validations.v1.collect_flavors has no description
+
 
 Current Linters
 ---------------

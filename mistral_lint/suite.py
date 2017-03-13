@@ -1,14 +1,19 @@
 from __future__ import print_function
 
+import collections
 import copy
 import os
 import pkg_resources
-import sys
 
 import yaml
 
 
 class LintSuite(object):
+
+    def __init__(self, print_messages):
+        self._messages = collections.defaultdict(set)
+        self.__print = print_messages
+        self._verbose = False
 
     def _is_yaml(self, path):
         return path.endswith(".yaml") or path.endswith(".yml")
@@ -41,6 +46,21 @@ class LintSuite(object):
 
         return self.lint_string(path, yaml_string, linters)
 
+    def _print(self, path, message):
+
+        if self.__print and path not in self._messages:
+            if len(self._messages):
+                print()
+            print(path)
+
+        self._messages[path].add(message)
+
+        if self.__print:
+            print(message)
+
+    def messages(self):
+        return self._messages
+
     def lint_string(self, path, yaml_string, linters, validate_file=True):
 
         loaded_yaml = yaml.safe_load(yaml_string)
@@ -56,8 +76,11 @@ class LintSuite(object):
                                         "output", "output-on-error", "vars"}):
             pass
         else:
-            print("Ignoring {}. It doesn't seem to be a workbook or workflow"
-                  .format(path))
+            if self._verbose:
+                self._print(
+                    path,
+                    "Ignoring {}. It doesn't seem to be a workbook or workflow"
+                    .format(path))
             return []
 
         errors = []
@@ -68,10 +91,8 @@ class LintSuite(object):
                     errors.append(error)
 
         if errors:
-            print(path)
             for error in errors:
-                print(error)
-            print()
+                self._print(path, error)
 
         return errors
 
@@ -85,10 +106,9 @@ class LintSuite(object):
                 file_result = self.lint_file(path, linters)
                 passed = passed and len(file_result)
 
-        if not passed:
-            sys.exit(1)
+        return self._messages
 
 
-def lint(paths):
-    suite = LintSuite()
-    suite.run_lint(paths)
+def lint(paths, print_messages=True):
+    suite = LintSuite(print_messages)
+    return suite.run_lint(paths)

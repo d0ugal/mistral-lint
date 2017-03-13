@@ -1,6 +1,9 @@
+from __future__ import print_function
+
 import argparse
 import json
-import os
+import subprocess
+import sys
 import tempfile
 
 import requests
@@ -13,11 +16,13 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument('--review', default=None, help=(
     "Provide the ID for a OpenStack gerrit review. It will be downloaded and "
     "linted - the paths argument will be ignored in this case."))
+parser.add_argument('--diff', action="store_true", help=(
+    "Used with --review to show the diff between the patch and its parent"))
 parser.add_argument('paths', nargs='*', help=(
     "A set of local paths to lint."))
 
 
-def _download_review(review_id):
+def _download_review(review_id, diff):
 
     GERRIT_URL = ("https://review.openstack.org/changes/?q={}"
                   "&o=DOWNLOAD_COMMANDS&o=CURRENT_REVISION")
@@ -31,20 +36,63 @@ def _download_review(review_id):
     ref = change['ref']
 
     with tempfile.TemporaryDirectory() as tmpdirname:
-        os.system('git clone {} {}'.format(url, tmpdirname))
-        os.system('cd {}; git fetch {} {}; git checkout FETCH_HEAD'.format(
-            tmpdirname, url, ref))
+        subprocess.check_output(['git', 'clone', url, tmpdirname],
+                                stderr=subprocess.STDOUT)
+        subprocess.check_output(['git', 'fetch', url, ref], cwd=tmpdirname,
+                                stderr=subprocess.STDOUT)
+        subprocess.check_output(['git', 'checkout', 'FETCH_HEAD'],
+                                cwd=tmpdirname, stderr=subprocess.STDOUT)
+        messages_patch = suite.lint([tmpdirname, ], not diff)
 
-        suite.lint([tmpdirname, ])
+        if diff:
+            subprocess.check_output(['git', 'reset', 'HEAD^', '--hard'],
+                                    cwd=tmpdirname, stderr=subprocess.STDOUT)
+            messages_prev = suite.lint([tmpdirname, ], False)
+
+        if not diff:
+            if messages_patch:
+                sys.exit(1)
+            else:
+                return
+
+        prev_files = set(messages_prev.keys())
+        patch_files = set(messages_patch.keys())
+        prev_only = prev_files - patch_files
+        patch_only = patch_files - prev_files
+        both_revs = prev_files | patch_files
+
+        for f in prev_only:
+            print(f)
+            for m in messages_prev[f]:
+                print("-{}".format(m))
+            print()
+
+        for f in patch_only:
+            print(f)
+            for m in messages_patch[f]:
+                print("+{}".format(m))
+            print()
+
+        for f in both_revs:
+            prev_file = messages_prev[f] - messages_patch[f]
+            patch_file = messages_patch[f] - messages_prev[f]
+            for m in prev_file:
+                print("-{}".format(m))
+            for m in patch_file:
+                print("+{}".format(m))
+
+        if messages_patch:
+            sys.exit(1)
 
 
 def main():
     args = parser.parse_args()
 
     if args.review:
-        _download_review(args.review)
+        _download_review(args.review, args.diff)
     elif args.paths:
-        suite.lint(args.paths)
+        if suite.lint(args.paths):
+            sys.exit(1)
 
 
 if __name__ == "__main__":
