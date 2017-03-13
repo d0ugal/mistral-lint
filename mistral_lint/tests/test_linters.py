@@ -20,7 +20,7 @@ class TestExpressionLinters(object):
         """
         result = expressions(YAML)
         assert result == [
-            ("W105: Expression brackets don't match '{{ test }} }}' on line 2 "
+            ("E103: Expression brackets don't match '{{ test }} }}' on line 2 "
              "in path")
         ]
 
@@ -38,7 +38,7 @@ class TestExpressionLinters(object):
         """
         result = expressions(YAML)
         assert result == [
-            ("W105: Expression brackets don't match '<% test %> %>' on line 3 "
+            ("E103: Expression brackets don't match '<% test %> %>' on line 3 "
              "in path")
         ]
 
@@ -54,7 +54,7 @@ class TestExpressionLinters(object):
         """
         result = expressions(YAML)
         assert result == [
-            ("W106: Failed to parse jinja2 expression '{{ test test }}' on "
+            ("E104: Failed to parse jinja2 expression '{{ test test }}' on "
              "line 2 in path")
         ]
 
@@ -70,7 +70,7 @@ class TestExpressionLinters(object):
         """
         result = expressions(YAML)
         assert result == [
-            ("W106: Failed to parse yaql expression 'stuff <% test test %> "
+            ("E105: Failed to parse yaql expression 'stuff <% test test %> "
              "after' on line 2 in path")
         ]
 

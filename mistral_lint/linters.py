@@ -162,7 +162,7 @@ def _validate_yaql(template, string, path):
             YAQL_ENGINE(found.strip("<%>"))
     except (yaql_exc.YaqlException, KeyError, ValueError, TypeError):
         lineno = _find_line(template, string)
-        return ("W105: Failed to parse yaql expression '{}' on line {} in {}"
+        return ("E105: Failed to parse yaql expression '{}' on line {} in {}"
                 .format(template, lineno, path))
 
 
