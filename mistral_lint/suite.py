@@ -65,7 +65,15 @@ class LintSuite(object):
 
         loaded_yaml = yaml.safe_load(yaml_string)
 
-        keys = set(loaded_yaml.keys())
+        try:
+            keys = set(loaded_yaml.keys())
+        except AttributeError:
+            if self._verbose:
+                self._print(
+                    path,
+                    "Ignoring {}. It doesn't seem to be a workbook or workflow"
+                    .format(path))
+            return []
 
         base_spec = {'name', 'version', 'description', 'tags'}
         if not validate_file:
