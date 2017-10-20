@@ -7,7 +7,16 @@ from mistral_lint import linters
 def expressions(suite):
     def lint(yaml):
         return suite.lint_string("path", yaml, {
-            "expressions": linters.expressions
+            "expressions": linters.expressions,
+        }, validate_file=False)
+    return lint
+
+
+@pytest.fixture
+def task_names(suite):
+    def lint(yaml):
+        return suite.lint_string("path", yaml, {
+            "task_names": linters.task_names,
         }, validate_file=False)
     return lint
 
@@ -79,3 +88,36 @@ class TestExpressionLinters(object):
         obj: "stuff before <% $.test %> and after"
         """
         assert not expressions(YAML)
+
+
+class TestTaskNameCheck(object):
+
+    def test_task_name_only_used_when_needed(self, task_names):
+
+        YAML = """---
+        version: '2.0'
+        name: wb
+
+        workflows:
+          wf:
+            tasks:
+              t1:
+                action: std.echo output="output"
+                publish:
+                  out: "<% task(t1).result %>"
+              t2:
+                action: std.echo output="output"
+                publish:
+                  out: "<% task(t1).result %>"
+              t3:
+                action: std.echo output="output"
+                publish:
+                  out: "<% task(t3).result %>"
+        """
+        result = task_names(YAML)
+        assert sorted(result) == [
+            ("E106: task 't1' should reference itself with task() and not "
+             "include its own name line task(t1)"),
+            ("E106: task 't3' should reference itself with task() and not "
+             "include its own name line task(t3)"),
+        ]
