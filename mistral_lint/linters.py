@@ -152,18 +152,26 @@ def _find_key(value, key):
                     yield r
 
 
+def _find_workflows(value):
+    for workflow_name, workflow_value in _find_key(value, "workflows"):
+        yield workflow_name, workflow_value
+
+
 def _find_tasks(value):
     for task_name, task_value in _find_key(value, "tasks"):
         yield task_name, task_value
 
 
 def task_names(path, string, yaml):
-    for task_name, task_value in _find_tasks(yaml):
-        for string in _find_strings(task_value):
-            if "task({})".format(task_name) in string:
-                yield ("E106: task '{0}' should reference itself with task() "
-                       "and not include its own name line task({0}). In {1}"
-                       .format(task_name, path))
+
+    W104 = ("W104: task '{0}' should reference itself with task() and not "
+            "include its own name line task({0}). In workflow {1}")
+
+    for workflow_name, workflow_value in _find_workflows(yaml):
+        for task_name, task_value in _find_tasks(workflow_value):
+            for string in _find_strings(task_value):
+                if "task({})".format(task_name) in string:
+                    yield W104.format(task_name, workflow_name)
 
 
 # These are copied from Mistral. That is bad.
