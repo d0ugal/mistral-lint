@@ -44,6 +44,12 @@ W103 type
 Checks the workflow type, if "direct" is given it gives a warning that it isn't
 needed
 
+W103 task_names
+~~~~~~~~~~~~~~~
+
+Checks that any uses of the task() expression function don't include references
+to the current task.
+
 E101 inputs
 ~~~~~~~~~~~
 
