@@ -162,8 +162,8 @@ def task_names(path, string, yaml):
         for string in _find_strings(task_value):
             if "task({})".format(task_name) in string:
                 yield ("E106: task '{0}' should reference itself with task() "
-                       "and not include its own name line task({0})"
-                       .format(task_name))
+                       "and not include its own name line task({0}). In {1}"
+                       .format(task_name, path))
 
 
 # These are copied from Mistral. That is bad.

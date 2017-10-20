@@ -117,7 +117,7 @@ class TestTaskNameCheck(object):
         result = task_names(YAML)
         assert sorted(result) == [
             ("E106: task 't1' should reference itself with task() and not "
-             "include its own name line task(t1)"),
+             "include its own name line task(t1). In path"),
             ("E106: task 't3' should reference itself with task() and not "
-             "include its own name line task(t3)"),
+             "include its own name line task(t3). In path"),
         ]
